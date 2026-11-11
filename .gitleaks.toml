@@ -1,0 +1,17 @@
+# gitleaks config: the default rules, plus an allowlist for values that look
+# like keys but are not secrets. Every entry below was reviewed by hand.
+# Run: gitleaks dir . (uses this file automatically)
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Reviewed false positives"
+regexes = [
+  # vocabulary keys named like *_30d / *_after_30 / day30_* (scoring rules, onboarding steps, dashboard metrics)
+  '''\b(h_timing_after_30|day30_reflection|live_placements_30d|tier1_placements_30d)\b''',
+  # fake Airtable record ids in unit tests (recAAAA... / recBBBB...)
+  '''\brec(A{13}|B{13})[0-9]\b''',
+  # Slack's published example signing secret, used to test request verification
+  '''8f742231b10e8888abcd99yyyzzz85a5''',
+]

@@ -1,0 +1,65 @@
+{
+	"name": "open-ronin",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"migrations:manifest": "node scripts/migration-manifest.mjs",
+		"setup:apply": "node scripts/apply-config.mjs"
+	},
+	"dependencies": {
+		"@dnd-kit/core": "^6.3.1",
+		"@dnd-kit/sortable": "^10.0.0",
+		"@dnd-kit/utilities": "^3.2.2",
+		"@modelcontextprotocol/sdk": "1.26.0",
+		"@supabase/ssr": "^0.5.2",
+		"@supabase/supabase-js": "^2.49.1",
+		"clsx": "^2.1.1",
+		"date-fns": "^4.1.0",
+		"exceljs": "^4.4.0",
+		"lucide-react": "^0.469.0",
+		"mammoth": "^1.13.0",
+		"mcp-handler": "1.1.0",
+		"next": "^15.5.28",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"react-markdown": "^10.1.0",
+		"remark-gfm": "^4.0.1",
+		"unist-util-visit": "^5.1.0",
+		"unpdf": "^1.8.1",
+		"yaml": "^2.9.1",
+		"zod": "^3.24.1",
+		"zustand": "^5.0.2"
+	},
+	"devDependencies": {
+		"@eslint/eslintrc": "^3.3.5",
+		"@tailwindcss/postcss": "^4.0.0",
+		"@tailwindcss/typography": "^0.5.20",
+		"@types/mdast": "^4.0.4",
+		"@types/node": "^22.10.0",
+		"@types/react": "^19.0.0",
+		"@types/react-dom": "^19.0.0",
+		"eslint": "^9.16.0",
+		"eslint-config-next": "^15.5.27",
+		"postcss": "^8.4.49",
+		"remark-parse": "^11.0.0",
+		"remark-stringify": "^11.0.0",
+		"tailwindcss": "^4.0.0",
+		"typescript": "^5.7.0",
+		"unified": "^11.0.5",
+		"vitest": "^4.1.11"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"sharp",
+			"unrs-resolver",
+			"@tailwindcss/oxide"
+		]
+	}
+}

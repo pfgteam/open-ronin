@@ -1,0 +1,71 @@
+# CI for the web app. Runs on PRs and on pushes to the branches that deploy.
+#
+# Why this exists: until now the only quality gate was a person running checks
+# locally. That let two breakages reach the deploy in one afternoon — a
+# pnpm-lock.yaml that had drifted out of sync with package.json (npm was used
+# to change deps), and type errors that Vercel does not catch because
+# next.config.ts still sets ignoreBuildErrors/ignoreDuringBuilds.
+#
+# Install uses pnpm with --frozen-lockfile, deliberately the same command Vercel
+# runs, so a desynced lockfile fails HERE instead of in the deploy.
+#
+# Scope note: these are pure-logic tests plus static checks. RLS behaviour is
+# verified against a real Postgres (see the migration validation harness in the
+# migration headers), which is not wired into CI yet.
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, vercel]
+
+# A new push to the same branch/PR makes the previous run irrelevant.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    name: typecheck · lint · test · ui-audit
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Pin pnpm 10 to match what Vercel resolves for this project (it picks
+      # 10.x by project creation date). A pnpm 11 lockfile can fail to parse
+      # there, so CI must not quietly use a newer major.
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+
+      - name: Install (frozen lockfile — same as Vercel)
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Unit tests
+        run: pnpm test
+
+      # Visual-cohesion guard from UI_GUIDELINES.md. Lives at the repo root, so
+      # it runs outside the `web` working directory.
+      - name: UI audit
+        run: bash scripts/ui-audit.sh
+        working-directory: .

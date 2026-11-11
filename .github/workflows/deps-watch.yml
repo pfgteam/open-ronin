@@ -1,0 +1,60 @@
+# Dependency watch: is the locked next.js in web/ the newest release on its
+# own minor line? Runs 08:00 Central on weekdays (13:00 UTC; 14:00 UTC in
+# CST winter is accepted drift) and on demand.
+#
+# Why a separate workflow: Next.js security releases land on every active
+# line at once (16.3.x and the 15.5.x backport this app is on) and
+# `pnpm audit` / Dependabot alerts read the global advisory DB, which lagged
+# Vercel's in-repo advisory by 6+ days in Sep 2026 and never flagged next
+# 15.5.25 at all. This job asks the npm registry directly. When the lockfile
+# is behind, the job fails, GitHub emails the repo owner about the failed
+# scheduled run, and the bump is a normal chore(deps) card on the same minor
+# line. That email is the whole alert path; nothing else depends on it.
+#
+# `pnpm audit` runs as a non-blocking, informational step. Its output today
+# is dominated by dev-only / transitive noise, so it must never gate.
+name: deps-watch
+
+on:
+  schedule:
+    - cron: "0 13 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  next-line:
+    name: next.js locked vs newest on minor line
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Compare web/pnpm-lock.yaml against newest on the same minor line + published vercel/next.js advisories
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/deps-watch.mjs --lockfile web/pnpm-lock.yaml
+
+  audit:
+    name: pnpm audit (informational, never blocks)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      # Same pnpm major CI pins (Vercel resolves 10.x for this project).
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # No `cache: pnpm` here: `pnpm audit` reads the lockfile and installs
+      # nothing, so the store never exists and setup-node's post-step "save
+      # cache" fails the job on every cache miss (= every lockfile change).
+      - name: pnpm audit --prod --audit-level high
+        continue-on-error: true
+        run: pnpm audit --prod --audit-level high

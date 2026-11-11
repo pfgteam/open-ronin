@@ -1,0 +1,61 @@
+{
+	"$schema": "https://openapi.vercel.sh/vercel.json",
+	"crons": [
+		{
+			"path": "/api/cron/checkin-reminders",
+			"schedule": "0 * * * *"
+		},
+		{
+			"path": "/api/cron/health-scores",
+			"schedule": "30 9 * * *"
+		},
+		{
+			"path": "/api/cron/scrapers",
+			"schedule": "*/5 * * * *"
+		},
+		{
+			"path": "/api/cron/sheet-sync",
+			"schedule": "*/10 * * * *"
+		},
+		{
+			"path": "/api/cron/the-work-metrics",
+			"schedule": "15 15 * * *"
+		},
+		{
+			"path": "/api/cron/token-hygiene",
+			"schedule": "45 8 * * *"
+		},
+		{
+			"path": "/api/cron/content-jobs",
+			"schedule": "* * * * *"
+		},
+		{
+			"path": "/api/cron/automations",
+			"schedule": "* * * * *"
+		},
+		{
+			"path": "/api/cron/contract-renewals",
+			"schedule": "0 13 * * *"
+		},
+		{
+			"path": "/api/cron/job-health",
+			"schedule": "20 * * * *"
+		},
+		{
+			"path": "/api/cron/opp-months",
+			"schedule": "40 8 * * *"
+		},
+		{
+			"path": "/api/cron/revenue",
+			"schedule": "*/10 * * * *"
+		},
+		{
+			"path": "/api/cron/hiring",
+			"schedule": "*/10 * * * *"
+		},
+		{
+			"path": "/api/cron/flywheel",
+			"schedule": "*/5 * * * *"
+		}
+	]
+}

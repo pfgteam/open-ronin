@@ -1,0 +1,18 @@
+{
+  "name": "or-skills-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Skills runtime v1 for Open Ronin — consumes the skill_runs queue (Supabase) and executes SKILL.md skills via the Claude Agent SDK. Swappable: any process that honors the same queue contract can replace it.",
+  "scripts": {
+    "start": "node src/index.mjs",
+    "test": "node --test \"test/**/*.test.mjs\""
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.1.0",
+    "@supabase/supabase-js": "^2.116.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

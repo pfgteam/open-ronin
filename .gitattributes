@@ -1,0 +1,26 @@
+# Normalize line endings to LF on commit, regardless of platform
+# This kills the CRLF↔LF diff noise on Windows checkouts.
+* text=auto eol=lf
+
+# Force binary handling for these
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
+
+# Force LF for shell/config files even if user has core.autocrlf=true
+*.sh text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.css text eol=lf
+*.md text eol=lf
+*.sql text eol=lf

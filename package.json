@@ -1,0 +1,16 @@
+{
+	"name": "open-ronin",
+	"version": "0.1.0",
+	"private": true,
+	"license": "Unlicense",
+	"scripts": {
+		"dev": "cd web && pnpm dev",
+		"build": "cd web && pnpm build",
+		"start": "cd web && pnpm start",
+		"lint": "cd web && pnpm lint",
+		"typecheck": "cd web && pnpm typecheck",
+		"test": "cd web && pnpm test",
+		"setup:apply": "cd web && pnpm setup:apply",
+		"ui-audit": "bash scripts/ui-audit.sh"
+	}
+}

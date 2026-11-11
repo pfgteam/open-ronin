@@ -1,0 +1,18 @@
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
+
+# Install policy: do not resolve a version published less than 24 hours ago
+# (the pnpm 11 default, made explicit so minimumReleaseAgeStrict applies and
+# pnpm fails instead of silently falling back). Lockfile installs
+# (--frozen-lockfile, Vercel, CI) are unaffected. next and @next/* are exempt
+# because security releases are bumped the day they land (deps-watch), and
+# next pins @next/env and @next/swc-* to its own version from the same publish.
+# To bump something else through the window on purpose:
+#   pnpm add <pkg>@<ver> --config.minimum-release-age=0
+# once, with the reason in the commit message. Add nothing else here without a
+# reason written next to it.
+minimumReleaseAge: 1440
+minimumReleaseAgeExclude:
+  - next
+  - "@next/*"

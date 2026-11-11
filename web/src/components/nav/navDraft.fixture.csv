@@ -1,0 +1,135 @@
+Menu,,"Section Heading(Title inline with horizontal line, except for major titles(bold) from top menu)","Primary Menu Item(These have logos and collapse to logo only in left column when submenu opens)(Not duplicated from Section heading, but sction heading are clickable)",Sub Menu Item,Items On Screen,Notes
+"Top Buttons(on the right, left to right)"
+,,,,,Search
+,,,,,Calendar
+,,,,,Notifications
+,,,Profile,,"Name, Email, Role"
+,,,,My Profile
+,,,,Requests
+,,,,Settings,"Light/Dark, Connections"
+,,,,Sign Out
+
+Top of Side Menu,,,,, + New Button
+
+
+Work,,The Work,,,Goes to Overview
+,,,"Overview(Login Lands here, no title)"
+,,,My Work
+,,,Planning & Priorities
+,,,Internal Work
+,,,Bot Work
+,,,Planning Calendars,,"(Views for Projects, Events, Individual, Combined Team(OOO, events, etc))"
+
+,,Client Work,Client Work,,Client Work Table
+,,,Media Outlets
+,,,Media Members
+
+,,,PR,Deliverables
+,,,,Media Opps
+,,,,Reports
+
+,,,Social ,Deliverables
+,,,,Posts Scheduler
+,,,,Reports
+
+,,,Writing,Writing Assignments
+
+,,,Flywheel,Deliverables
+,,,,SEO/GEO Health
+,,,,Reports
+
+,,,Beacon,Deliverables
+,,,,Reports
+
+Clients,,Client Information
+,,,"Overview(Clients lands here, no title)",,"Number of Clients in each package, Client Health, Upcoming Major Items, and probably some more key tiles"
+,,,All Clients,,Client Table,Filter for client type
+,,,Contacts,,Contacts(People associated with clients)
+,,,Tickets,,Client Requests ,Can pull from Sessions/transcripts or Portal or manual add
+,,,Payments,,Client Payments Table
+,,,Portals,,"Client Portal New Button, Client Portal tiles and search",Auto create each as new clients get Onboarded
+,,,Proof Library,,"Clinet Reviews, Testimonials, Case Studies"
+
+Growth,,Revenue Growth
+,,,"Overview(Clients lands here, no title)",,"Overall metrics, Individual Team metrics, "
+,,,Prospects
+,,,Pipeline
+,,,Call Tracker
+,,,People & Brands,,,MQL scoring
+,,,Referrals & Reviews
+,,,Acquisitions,,,Only available to direct permission access users
+
+Studio,,Studio
+,,Content,Post Ideas,,,(Links to Post Scheduler as Tasks)(After created and Scheduled goes to client portal for approval)
+,,,Post Creator
+,,,Podcast Studio
+,,,Podcast Distribution
+
+,,Tools,Copy Creation
+,,,Scrapers
+,,,Workflows
+,,,Products
+,,,Forms
+,,,Social Listening
+
+,,Pitching,Media Requests
+,,,Lists
+,,,Ideation
+,,,Autopitch
+,,,Send Pitch
+
+
+Team,,Team Information
+,,,Directory / Org Chart (Team lands here)
+
+,,,Performance,Check-ins
+,,,,Vantage Point
+,,,,Calibration
+,,,,Metrics
+,,,,PAP
+,,,,Attendance
+
+,,,Knowledge,Knowledge Base
+,,,,Sessions
+,,,,Templates
+,,,,Onboarding
+
+,,,Hiring,Positions
+,,,,Requests
+,,,,Postings
+,,,,Candidates
+,,,,Message review
+,,,,Quality
+
+
+Management,,Organization
+,,,Dashboards (Management lands here),,"Tabs at top to switch between areas, general is first, I think I mapped this out somewhere already"
+
+,,,Requests Desk,,"Pending Requests(Filter by type tab style), Approval setup per request type"
+
+,,,Team Systems,KPIs
+,,,,Departments
+,,,,Calibration Cyles
+,,,,Time Studies
+,,,,Attendance Settings
+,,,,Metrics Catalog
+,,,,Brand
+,,,,Departments
+,,,,Positions
+
+,,Admin,Users,User Management
+,,,,Roles
+,,,,Capabilities
+
+,,,Platform,Admin Overview,"Design System settings, AI spend limits, Connections",This is the panel for settings/tools in every area not on the menus
+,,,,Bot roster
+,,,,Agentic Approval,Approval Rules for Bots
+,,,,Routing rules
+,,,,AI Providers
+,,,,Analytics and costs
+
+,,,Data,Bases
+,,,,Tables
+,,,,Sheets
+,,,,Imports,Import Data Tool
+,,,,,,Formerly Pipeline

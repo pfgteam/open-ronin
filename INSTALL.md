@@ -2,7 +2,7 @@
 
 Open Ronin installs itself through your AI coding agent (Claude Code, Codex, Cursor, OpenCode, or similar). Paste each prompt below into the agent, in order. Each step reads `open-ronin.config.yaml`, does the work, checks it, and tells you when to paste the next one. You don't need to edit code by hand.
 
-> **Status:** the application code is still landing in this repo. If a step can't find `web/` or `supabase/`, the agent will stop and tell you. Watch the repo for the first release.
+> **By hand instead?** [docs/SETUP.md](docs/SETUP.md) has every step as plain commands.
 
 **Before you start:** have a terminal open with your agent, a GitHub account, and about an hour.
 
@@ -20,7 +20,7 @@ as the format. Never ask me for passwords or API keys during the interview.
 ```text
 Read open-ronin.config.yaml. Check that this machine has what Open Ronin needs: Git, Node.js 20+,
 pnpm (enable it with corepack if missing), and the Supabase CLI. If hosting.target is
-docker-supabase, also check for Docker. Install anything missing, asking me before each install.
+local or docker-supabase, also check for Docker (the local database runs in it). Install anything missing, asking me before each install.
 Report a table: tool, required version, found version, status.
 ```
 
@@ -36,8 +36,10 @@ in Step 4, but don't ask me to paste them yet.
 ### Step 3: Database
 ```text
 Read open-ronin.config.yaml. Create (or link) a Supabase project in hosting.region using the
-Supabase CLI, after I log in myself. Apply every migration in supabase/migrations in order.
-If install.demo_data is true, load the demo seed. Then verify: list the tables, confirm
+Supabase CLI, after I log in myself (`supabase login`, `supabase link --project-ref <ref>`).
+Apply every migration in supabase/migrations in order (`supabase db push`). If install.demo_data
+is true, load the demo seed (`supabase db push --include-seed`, file supabase/seed.sql). For
+hosting.target local, `supabase start` from the repo root does both. Then verify: list the tables, confirm
 row-level security is on for every public table, and report the migration count applied.
 Stop and show me any error. Don't skip or edit migrations.
 ```
@@ -64,8 +66,9 @@ the local URL.
 ```text
 Read open-ronin.config.yaml. Apply it to the running app: organization name and domain, branding,
 service lines and their deliverables, packages, departments, roles, enabled modules, client
-portal, sign-in methods, and AI spend limits. Use the app's setup wizard / Admin screens or its
-own scripts, not raw database edits. Create the first admin from team.first_admin. Then sign me
+portal, sign-in methods, and AI spend limits. Use the app's setup wizard (/setup, which loads
+open-ronin.config.yaml from the repo root) or its own script (`pnpm setup:apply` in web/), not raw
+database edits. Google sign-in also needs the Google provider turned on in Supabase Auth. Create the first admin from team.first_admin. Then sign me
 in and show me screenshots of the Work, Clients and Admin pages, with every menu matching the
 modules I chose.
 ```
@@ -83,7 +86,8 @@ and why. Never overwrite existing records.
 Read hosting in open-ronin.config.yaml. Deploy: for vercel-supabase, create the Vercel project
 from this repo (web/ as the root), copy the env variables from web/.env.local (production values),
 set the cron jobs and connect hosting.app_url as a custom domain with the exact DNS records I
-need to add. For docker-supabase, build and run with docker-compose behind HTTPS.
+need to add. For docker-supabase: there is no Dockerfile in this repo yet, so stop and tell me;
+run the app with `pnpm build && pnpm start` in web/ behind an HTTPS proxy only if I ask for that.
 Then verify the live URL loads, sign-in works and cron routes answer with auth.
 Report the URL and anything left for me to do.
 ```

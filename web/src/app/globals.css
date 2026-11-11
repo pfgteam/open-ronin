@@ -1,0 +1,230 @@
+@import 'tailwindcss';
+
+@config '../../tailwind.config.ts';
+
+/* Wiki articles (prose-*). Only the Knowledge Base uses it. */
+@plugin '@tailwindcss/typography';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   Design tokens — "The Work Revamp" (prototype dated 2026-10-01, approved by
+   Alex). The --page … --shadow variables are the prototype's own :root set,
+   one block per mode. tailwind.config.ts maps the `slate` and `primary`
+   scales onto the --c-* aliases below, so the existing
+   `bg-slate-50 dark:bg-slate-900` vocabulary across the app resolves to the
+   new palette in both modes without a class rewrite:
+
+     step        light                     dark
+     slate-50    --bg    #f6f7f7 page      #f6f7f7 (stays light)
+     slate-100   --soft  #f2f3f3 fills     --tx    #f2f2f2 (body text)
+     slate-200   --line  #e3e6e6 hairline  #e0e2e2
+     slate-300   --line2 #c9cfcf controls  #cfd2d2
+     slate-400   --tx3   #8f9494 muted     --tx2   #b8bcbc (secondary text)
+     slate-500   #6f7474 (4.7:1 on white)  --tx3   #848989
+     slate-600   --tx2   #565656 secondary --line2 #474a4a
+     slate-700   #3a3c3c                   --line  #333535 (borders, hover)
+     slate-800   #2b2c2c                   --card  #232424 (cards, nav)
+     slate-900   --tx    #202020 text      --bg    #1b1c1c (page)
+     slate-950   #141414                   --page  #141414
+
+   `dark:bg-slate-800` still means "the card surface in dark mode" — it just
+   resolves to the prototype's #232424 now. UI_GUIDELINES.md's rules about
+   which step goes where are unchanged. */
+
+:root {
+	color-scheme: light;
+
+	--page: #e9eded;
+	--bg: #f6f7f7;
+	--card: #ffffff;
+	--soft: #f2f3f3;
+	--hover: #eef6f6;
+	/* Selected row/item: must read stronger than --hover (hover is the same hue). */
+	--selected: #daefef;
+	--line: #e3e6e6;
+	--line2: #c9cfcf;
+	--tx: #202020;
+	--tx2: #565656;
+	--tx3: #8f9494;
+	--pri: #069494;
+	--pri600: #057e7e;
+	--pri50: #ebf6f6;
+	--pri100: #daefef;
+	--pri-t: #035151;
+	--lime: #88d03a;
+	--danger: #d83a52;
+	--warnbg: #fff7e6;
+	--warntx: #7a4b00;
+	--shadow: 0 12px 32px rgba(20, 30, 30, 0.16);
+
+	--c-slate-50: var(--bg);
+	--c-slate-100: var(--soft);
+	--c-slate-200: var(--line);
+	--c-slate-300: var(--line2);
+	--c-slate-400: var(--tx3);
+	--c-slate-500: #6f7474;
+	--c-slate-600: var(--tx2);
+	--c-slate-700: #3a3c3c;
+	--c-slate-800: #2b2c2c;
+	--c-slate-900: var(--tx);
+	--c-slate-950: #141414;
+
+	--c-primary-950: #023b3b;
+	--c-hover: var(--hover);
+	--c-selected: var(--selected);
+
+	/* Brand + status scales (2026-11-05, design system settings). These were
+	   hex literals in tailwind.config.ts; they are variables now so Admin ›
+	   Design system can override them at runtime (DesignTokens.tsx emits the
+	   overrides AFTER this file). The values below ARE the defaults. */
+	--c-primary-50: #ebf6f6;
+	--c-primary-100: #daefef;
+	--c-primary-200: #b4dfdf;
+	--c-primary-300: #82caca;
+	--c-primary-400: #38a9a9;
+	--c-primary-500: #1a9d9d;
+	--c-primary-600: #069494;
+	--c-primary-700: #057e7e;
+	--c-primary-800: #046868;
+	--c-primary-900: #035151;
+	--c-accent-50: #f5fbef;
+	--c-accent-100: #edf8e1;
+	--c-accent-200: #dbf1c4;
+	--c-accent-300: #c4e89c;
+	--c-accent-400: #a0d961;
+	--c-accent-500: #92d44a;
+	--c-accent-600: #88d03a;
+	--c-accent-700: #74b131;
+	--c-accent-800: #5f9229;
+	--c-accent-900: #4b7220;
+	--c-accent-950: #365317;
+	--c-success: #00a35c;
+	--c-warning: #e8890c;
+	--c-danger: #d83a52;
+
+	/* Categorical palette for avatars and group bars (style guide decision 8):
+	   tokens, never a hard-coded monday.com list. White text reads on each. */
+	--viz-1: var(--c-primary-700);
+	--viz-2: var(--c-accent-900);
+	--viz-3: #a85a05;
+	--viz-4: #b8304a;
+	--viz-5: #007a45;
+	--viz-6: var(--c-primary-900);
+	--viz-7: #565656;
+	--viz-8: #3a3c3c;
+
+	/* Font + button style (overridable from Admin › Design system). */
+	--font-app: var(--font-inter);
+	--btn-border-w: 1px;
+	--btn-radius: var(--radius-md);
+	--btn-weight: 500;
+}
+
+.dark {
+	color-scheme: dark;
+
+	--page: #141414;
+	--bg: #1b1c1c;
+	--card: #232424;
+	--soft: #2b2c2c;
+	--hover: #173232;
+	--selected: #1d4a4a;
+	--line: #333535;
+	--line2: #474a4a;
+	--tx: #f2f2f2;
+	--tx2: #b8bcbc;
+	--tx3: #848989;
+	--pri50: #0f2e2e;
+	--pri100: #134040;
+	--pri-t: #82caca;
+	--warnbg: #3a2c10;
+	--warntx: #f5cd85;
+	--shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+	--c-slate-50: #f6f7f7;
+	--c-slate-100: var(--tx);
+	--c-slate-200: #e0e2e2;
+	--c-slate-300: #cfd2d2;
+	--c-slate-400: var(--tx2);
+	--c-slate-500: var(--tx3);
+	--c-slate-600: var(--line2);
+	--c-slate-700: var(--line);
+	--c-slate-800: var(--card);
+	--c-slate-900: var(--bg);
+	--c-slate-950: var(--page);
+
+	/* `dark:bg-primary-950` is the active-nav tint = the prototype's dark pri50. */
+	--c-primary-950: var(--pri50);
+}
+
+html {
+	background: var(--page);
+}
+
+::selection {
+	@apply bg-primary-200 text-primary-900;
+}
+
+:where(.dark) ::selection {
+	@apply bg-primary-800 text-primary-100;
+}
+
+/* Scrollbar — subtle default */
+::-webkit-scrollbar {
+	@apply w-1.5 h-1.5;
+}
+
+::-webkit-scrollbar-track {
+	@apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	@apply bg-slate-300 rounded-full;
+}
+
+:where(.dark) ::-webkit-scrollbar-thumb {
+	@apply bg-slate-600;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	@apply bg-slate-400;
+}
+
+:where(.dark) ::-webkit-scrollbar-thumb:hover {
+	@apply bg-slate-500;
+}
+
+/* Always-visible horizontal scrollbar — used for wide tables in BaseExplorer.
+   Uses the token variables directly (not @apply) because Tailwind 4's @apply
+   doesn't always cascade the dark variant through nested pseudo-element
+   selectors; the variables already flip per mode. */
+
+.scrollbar-x-always {
+	overflow-x: scroll !important;
+	overflow-y: auto;
+	scrollbar-width: thin; /* Firefox: always-visible thin bar */
+	scrollbar-color: var(--tx3) var(--soft);
+}
+
+.scrollbar-x-always::-webkit-scrollbar {
+	height: 12px;
+	-webkit-appearance: none; /* macOS Safari/Chrome: bypass system auto-hide */
+}
+
+.scrollbar-x-always::-webkit-scrollbar-track {
+	background: var(--soft);
+	border-radius: 9999px;
+}
+
+.scrollbar-x-always::-webkit-scrollbar-thumb {
+	background: var(--tx3);
+	border-radius: 9999px;
+	border: 2px solid var(--soft);
+	background-clip: padding-box;
+}
+
+.scrollbar-x-always::-webkit-scrollbar-thumb:hover {
+	background: var(--tx2);
+	background-clip: padding-box;
+}

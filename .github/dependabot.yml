@@ -1,0 +1,32 @@
+# Dependabot config for the web app (web/). Weekly version updates,
+# grouped so the board sees at most two PRs a week (prod minor+patch, dev
+# deps) plus security PRs.
+#
+# NOTE ON THE NO-PR POLICY: Alex's "no pull requests, push branch:main"
+# rule covers human and bot feature work. Dependabot PRs are the standing
+# exception: the repo owner merges them once CI is green. Do not close
+# them on sight.
+#
+# Security updates read the GitHub Advisory DB, which lags Vercel's own
+# release feed by days (Sep 2026: pnpm audit never flagged next 15.5.25).
+# The scheduled deps-watch workflow in .github/workflows/deps-watch.yml is
+# the primary signal for next.js; Dependabot is the follow-through.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/web"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "08:00"
+      timezone: America/Chicago
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      production-minor-patch:
+        dependency-type: production
+        update-types: ["minor", "patch"]
+      dev-dependencies:
+        dependency-type: development
+        update-types: ["major", "minor", "patch"]

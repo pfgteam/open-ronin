@@ -1,9 +1,41 @@
+# Dependencies
 node_modules/
-.vercel/
+
+# Build outputs
+.next/
+.output/
+dist/
+build/
+
+# Environment (never commit secrets; the examples are fine)
 .env
 .env.*
 !.env.example
+
+# Your organisation's install answers stay local unless you choose to commit them
+open-ronin.config.yaml
+
+# Deploy / tooling state
+.vercel/
+supabase/.temp/
+supabase/.branches/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/settings.json
+.idea/
+*.sw?
+
+# OS
 .DS_Store
 Thumbs.db
 
-.vercel
+# Coverage
+coverage/
+
+# Temp
+tmp/
