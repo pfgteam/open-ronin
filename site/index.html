@@ -5,6 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Open Ronin — Open Source Agency OS</title>
 <meta name="description" content="Open source agency operations platform. Built by agencies, for agencies.">
+<link rel="canonical" href="https://openronin.com">
+<link rel="icon" type="image/svg+xml" href="/assets/logo-mark.svg">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#09090b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Open Ronin">
+<meta property="og:title" content="Open Ronin — Open Source Agency OS">
+<meta property="og:description" content="Open source agency operations platform. Built by agencies, for agencies.">
+<meta property="og:url" content="https://openronin.com">
+<meta property="og:image" content="https://openronin.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Open Ronin — Open Source Agency OS">
+<meta name="twitter:description" content="Open source agency operations platform. Built by agencies, for agencies.">
+<meta name="twitter:image" content="https://openronin.com/og-image.png">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
@@ -16,9 +34,9 @@
     --border: #1e1e24;
     --text: #e4e4e7;
     --text-dim: #71717a;
-    --accent: #10b981;
-    --accent-dim: rgba(16,185,129,0.12);
-    --accent2: #6366f1;
+    --accent: #A71820;
+    --accent-dim: rgba(167, 24, 32, 0.14);
+    --accent2: #C4453C;
   }
 
   body {
@@ -73,24 +91,19 @@
   .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-weight: 700;
-    font-size: 18px;
-    letter-spacing: -0.02em;
     text-decoration: none;
     color: var(--text);
   }
-  .logo-mark {
-    width: 32px;
+  .logo-img {
     height: 32px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    font-weight: 800;
-    color: white;
+    width: auto;
+    display: block;
+  }
+  .hero-mark {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 28px;
+    display: block;
   }
   nav a.gh {
     color: var(--text-dim);
@@ -118,7 +131,7 @@
     gap: 6px;
     padding: 6px 14px;
     background: var(--accent-dim);
-    border: 1px solid rgba(16,185,129,0.2);
+    border: 1px solid rgba(167, 24, 32, 0.28);
     border-radius: 100px;
     font-size: 13px;
     font-weight: 500;
@@ -178,7 +191,7 @@
   }
   .btn-primary {
     background: var(--accent);
-    color: #000;
+    color: #fff;
   }
   .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
   .btn-secondary {
@@ -202,7 +215,7 @@
     border-radius: 12px;
     transition: border-color 0.2s;
   }
-  .feature:hover { border-color: rgba(16,185,129,0.3); }
+  .feature:hover { border-color: rgba(167, 24, 32, 0.4); }
   .feature-icon {
     width: 40px;
     height: 40px;
@@ -246,13 +259,13 @@
   <div class="container">
     <nav>
       <a href="/" class="logo">
-        <div class="logo-mark">R</div>
-        Open Ronin
+        <img class="logo-img" src="/assets/logo-lockup-dark.svg" alt="Open Ronin">
       </a>
       <a href="https://github.com/pfgteam/open-ronin" class="gh">GitHub →</a>
     </nav>
 
     <section class="hero">
+      <img class="hero-mark" src="/assets/logo-mark.svg" alt="" width="96" height="96">
       <div class="badge">Coming Soon</div>
       <h1>Agency ops,<br><span class="gradient">open source.</span></h1>
       <p class="subtitle">

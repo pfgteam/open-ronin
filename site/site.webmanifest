@@ -1,0 +1,21 @@
+{
+  "name": "Open Ronin",
+  "short_name": "Open Ronin",
+  "description": "Open source agency operations platform. Built by agencies, for agencies.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
