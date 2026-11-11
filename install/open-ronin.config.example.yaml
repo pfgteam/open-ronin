@@ -1,0 +1,72 @@
+# open-ronin.config.yaml: written by the install questionnaire (install/questionnaire.md).
+# No secrets in this file. Keys and tokens go in web/.env.local.
+
+org:
+  name: Example Agency
+  domain: example.com
+  type: agency
+  allowed_email_domains: [example.com]
+  timezone: America/Chicago
+  currency: USD
+
+brand:
+  logo: null            # path or URL; can be set later in Admin > Design System
+  primary_color: "#0F766E"
+
+service_lines:
+  - key: pr
+    label: PR
+    deliverables: [Placements, Media opportunities]
+    reports: true
+  - key: social
+    label: Social
+    deliverables: [Posts]
+    reports: true
+
+packages: []            # e.g. [{name: Starter, service_lines: [pr]}]
+
+team:
+  size_now: 10
+  size_12mo: 20
+  departments: [Delivery, Sales, Operations]
+  roles: [admin, executive, manager, member, contractor]
+  first_admin: {name: Jane Doe, email: jane@example.com}
+
+modules:
+  work: true
+  clients: true
+  growth: false
+  studio: false
+  team: true
+  management: false
+  ai_agents: false
+  client_portal: false
+
+migration:
+  sources: [spreadsheets]
+  import_first: [clients, team]
+
+hosting:
+  target: vercel-supabase   # vercel-supabase | docker-supabase | local
+  accounts: {github: true, supabase: false, vercel: false}
+  app_url: null
+  region: us-east-1
+
+auth:
+  methods: [google, magic_link]
+
+email:
+  provider: resend
+  from: null
+
+integrations: []
+
+ai:
+  providers: []
+  spend_limit_total: 200       # USD per month
+  spend_limit_per_user: 20
+
+install:
+  demo_data: true
+  comfort: follow-along        # do-it-for-me | follow-along | developer
+  target_date: null
