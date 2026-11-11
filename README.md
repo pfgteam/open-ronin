@@ -1,11 +1,11 @@
 # Open Ronin
 
-Open source agency operations platform.
+Open-source, agent-driven agency operations platform.
 
-## Status
+The application code is landing here soon.
 
-Setting up — site coming soon at [openronin.com](https://openronin.com).
+The website lives at [pfgteam/OR-site](https://github.com/pfgteam/OR-site) and is served at [openronin.com](https://openronin.com).
 
 ## License
 
-[Unlicense](UNLICENSE) — public domain.
+[Unlicense](UNLICENSE) (public domain).
