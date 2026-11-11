@@ -8,6 +8,15 @@ import './globals.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
+// Every page renders per request. The root not-found boundary renders the app
+// shell (AppLayout reads the session cookie), and Next renders that boundary
+// as part of every route tree. Prerendered "static" pages (login, signup,
+// reset-password, privacy...) therefore 500'd with "Page changed from static
+// to dynamic at runtime, reason: cookies" as soon as anything revalidated them
+// (an Admin › Design System save, `pnpm setup:apply`). Rendering dynamically
+// costs nothing that matters here: every page already reads the session.
+export const dynamic = 'force-dynamic';
+
 // The app name in every browser tab comes from Admin › Design system
 // (identity.app_name), so another agency's deployment never says Open Ronin.
 // The template lets any page set a title and get "X · <app name>".

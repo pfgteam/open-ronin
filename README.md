@@ -13,7 +13,8 @@ Prefer doing it by hand? [docs/SETUP.md](docs/SETUP.md) has the same steps as pl
 ```bash
 supabase start                       # local database + demo data (needs Docker)
 cp web/.env.example web/.env.local   # fill in from `supabase status -o env`
-cd web && pnpm install && pnpm dev   # http://localhost:3000, then sign up and finish /setup
+cd web && pnpm install && pnpm dev   # http://localhost:3000
+pnpm setup:apply                     # web/, 2nd terminal: applies open-ronin.config.yaml, creates your admin, prints a one-time sign-in link
 ```
 
 The website lives at [pfgteam/OR-site](https://github.com/pfgteam/OR-site) and is served at [openronin.com](https://openronin.com).

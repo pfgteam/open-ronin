@@ -49,6 +49,7 @@ declare global {
 			GHL_TOKEN_ENC_KEY?: string;
 
 			// Email
+			AUTH_EMAIL_ENABLED?: string;
 			RESEND_API_KEY?: string;
 			RESEND_FROM_EMAIL?: string;
 

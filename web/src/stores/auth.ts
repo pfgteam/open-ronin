@@ -64,8 +64,8 @@ interface AuthState {
 		password: string,
 		firstName?: string,
 		lastName?: string,
-	) => Promise<void>;
-	signInWithGoogle: () => Promise<void>;
+	) => Promise<boolean>;
+	signInWithGoogle: (hd?: string) => Promise<void>;
 	resetPassword: (email: string) => Promise<void>;
 	logout: () => Promise<void>;
 	refreshProfile: () => Promise<void>;
@@ -184,7 +184,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 		set({ isLoading: true, error: null });
 		try {
 			const supabase = createClient();
-			const { error } = await supabase.auth.signUp({
+			const { data, error } = await supabase.auth.signUp({
 				email,
 				password,
 				options: {
@@ -200,6 +200,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 			});
 			if (error) throw error;
 			set({ isLoading: false });
+			// True when Supabase signed the user straight in (email confirmation
+			// off); false when a confirmation email is pending.
+			return !!data.session;
 		} catch (err) {
 			set({
 				error: err instanceof Error ? err.message : 'Signup failed',
@@ -209,7 +212,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 		}
 	},
 
-	signInWithGoogle: async () => {
+	signInWithGoogle: async (hd) => {
 		set({ isLoading: true, error: null });
 		try {
 			const supabase = createClient();
@@ -217,9 +220,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 				provider: 'google',
 				options: {
 					redirectTo: `${window.location.origin}/auth/callback`,
-					// `hd` hints Google to default to Open Ronin Workspace.
-					// example.org users land on the normal Google chooser.
-					queryParams: { hd: 'example.com' },
+					// `hd` hints Google to pre-select the org's Workspace (first
+					// allowed sign-in domain). Others get the normal chooser.
+					...(hd ? { queryParams: { hd } } : {}),
 				},
 			});
 			if (error) throw error;

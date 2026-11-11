@@ -23,7 +23,9 @@ export async function GET(request: Request) {
 	const supabase = await createClient();
 	const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
 	if (error) {
-		const back = new URL(type === 'magiclink' ? '/portal' : '/auth/login', url.origin);
+		// Portal links go back to the portal sign-in; staff links (including the
+		// first admin's link from `pnpm setup:apply`) go to the staff login.
+		const back = new URL(next.startsWith('/portal') ? '/portal' : '/auth/login', url.origin);
 		back.searchParams.set('error', error.message);
 		return NextResponse.redirect(back);
 	}

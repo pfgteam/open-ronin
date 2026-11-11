@@ -11,6 +11,7 @@
 		"typecheck": "cd web && pnpm typecheck",
 		"test": "cd web && pnpm test",
 		"setup:apply": "cd web && pnpm setup:apply",
+		"signin-link": "cd web && pnpm signin-link",
 		"ui-audit": "bash scripts/ui-audit.sh"
 	}
 }

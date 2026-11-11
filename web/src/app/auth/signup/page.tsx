@@ -68,7 +68,13 @@ export default function SignupPage() {
 		e.preventDefault();
 		if (!validate()) return;
 		try {
-			await signup(email, password, firstName, lastName);
+			const signedIn = await signup(email, password, firstName, lastName);
+			// Email confirmation off: Supabase already signed them in, so go
+			// straight in (the setup gate takes over if setup isn't finished).
+			if (signedIn) {
+				window.location.assign('/');
+				return;
+			}
 			setSent(true);
 		} catch {
 			// store handles
@@ -99,6 +105,9 @@ export default function SignupPage() {
 						<div className="text-center py-4">
 							<p className="text-sm text-slate-700 dark:text-slate-300">
 								Confirmation link sent. Check your email to finish signing up.
+							</p>
+							<p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+								No email after a few minutes? Ask an admin to confirm your account.
 							</p>
 							<Link
 								href="/auth/login"

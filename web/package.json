@@ -11,7 +11,8 @@
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"migrations:manifest": "node scripts/migration-manifest.mjs",
-		"setup:apply": "node scripts/apply-config.mjs"
+		"setup:apply": "node scripts/apply-config.mjs",
+		"signin-link": "node scripts/signin-link.mjs"
 	},
 	"dependencies": {
 		"@dnd-kit/core": "^6.3.1",

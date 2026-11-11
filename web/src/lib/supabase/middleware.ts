@@ -42,6 +42,9 @@ const PUBLIC_ROUTES = [
 	'/api/ingest', '/api/contract-version',
 	// /api/mcp authenticates with its own bearer token inside the handler
 	'/api/mcp',
+	// /api/setup/refresh is called by `pnpm setup:apply` from the command line
+	// (no session) and checks Bearer CRON_SECRET itself, failing closed.
+	'/api/setup/refresh',
 	// /privacy must be reachable with no session — it's the Privacy Policy /
 	// Data Deletion Instructions URL filed in the Meta app (App settings →
 	// Basic → Privacy Policy URL / Data Deletion), and Meta's reviewer has no
@@ -180,8 +183,16 @@ export async function updateSession(request: NextRequest) {
 	if (isPublic(pathname)) {
 		// If already authenticated and visiting an auth page, bounce to Home.
 		// /auth/confirm consumes a token_hash (portal magic link): it must run even
-		// when a session already exists, like /auth/callback.
-		if (user && pathname.startsWith('/auth') && !pathname.startsWith('/auth/callback') && !pathname.startsWith('/auth/confirm')) {
+		// when a session already exists, like /auth/callback. /auth/reset-password
+		// is where a signed-in user (recovery link, or the first admin's one-time
+		// link from `pnpm setup:apply`) chooses a password, so it must not bounce.
+		if (
+			user &&
+			pathname.startsWith('/auth') &&
+			!pathname.startsWith('/auth/callback') &&
+			!pathname.startsWith('/auth/confirm') &&
+			!pathname.startsWith('/auth/reset-password')
+		) {
 			return NextResponse.redirect(new URL(isPortalLogin ? '/portal' : '/', request.url));
 		}
 		return supabaseResponse;

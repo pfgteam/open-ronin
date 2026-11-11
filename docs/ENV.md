@@ -22,6 +22,7 @@ Optional in the same group: `NEXT_PUBLIC_ORG_NAME` (name shown before the databa
 
 | Variable | Needed for |
 |---|---|
+| `AUTH_EMAIL_ENABLED` | `true` turns on the login page's "Email me a sign-in link" and "Forgot password?". Set it only after Supabase Auth has a working email provider (Authentication › Emails › SMTP Settings). Email + password sign-in never needs it. |
 | `RESEND_API_KEY` | Sending invites, notifications, form alerts |
 | `RESEND_FROM_EMAIL` | From address (`email.from` in the config) |
 
@@ -31,7 +32,7 @@ Supabase Auth sends its own sign-in emails; point its SMTP settings at the same 
 
 | Variable | Needed for |
 |---|---|
-| `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`, `NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID` | Google Calendar sync (sign-in with Google is configured in Supabase Auth) |
+| `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`, `NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID` | Google Calendar sync. Sign-in with Google is configured in Supabase Auth, not here: the login page shows the Google button by itself once that provider is enabled (see SETUP.md › Sign-in methods). |
 | `GOOGLE_SERVICE_ACCOUNT_JSON` | Reading Google Sheets for dashboards |
 | `METRICS_SPREADSHEET_ID` | The metrics sheet the dashboards read |
 

@@ -4,7 +4,7 @@
 // User lands here from the email link → callback exchanged the code for a
 // session → now they pick a new password.
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Card from '@/components/ui/Card';
@@ -19,6 +19,12 @@ export default function ResetPasswordPage() {
 	const [confirm, setConfirm] = useState('');
 	const [error, setError] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
+	// ?welcome=1: the first admin arriving from the one-time link that
+	// `pnpm setup:apply` prints. Same form, friendlier words.
+	const [welcome, setWelcome] = useState(false);
+	useEffect(() => {
+		setWelcome(new URLSearchParams(window.location.search).get('welcome') === '1');
+	}, []);
 
 	async function handleSubmit(e: React.FormEvent) {
 		e.preventDefault();
@@ -53,8 +59,13 @@ export default function ResetPasswordPage() {
 				<div className="text-center mb-8">
 					<BrandLogo />
 					<h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
-						Set a new password
+						{welcome ? 'Choose your password' : 'Set a new password'}
 					</h1>
+					{welcome && (
+						<p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+							You&apos;re signed in. Set a password so you can sign in with your email from now on.
+						</p>
+					)}
 				</div>
 
 				{error && (
@@ -82,7 +93,7 @@ export default function ResetPasswordPage() {
 							required
 						/>
 						<Button type="submit" loading={isLoading} full>
-							Update password
+							{welcome ? 'Save password and continue' : 'Update password'}
 						</Button>
 						<Link
 							href="/auth/login"

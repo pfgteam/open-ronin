@@ -50,6 +50,18 @@ cp web/.env.example web/.env.local
 
 Fill in the Required block (see [ENV.md](ENV.md)): Supabase URL and keys from step 2, `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_ALLOWED_EMAIL_DOMAINS` (same list as `org.allowed_email_domains`), and random `CRON_SECRET` / `INGEST_API_KEY` (`openssl rand -hex 32`).
 
+### Sign-in methods
+
+Email + password always works and needs no setup. The login page shows the others only when they can actually work:
+
+| Method | Shown when | How to turn it on |
+|---|---|---|
+| Email + password | always | nothing to do |
+| Continue with Google | the Google provider is enabled in Supabase Auth | Create a Google OAuth client (type Web application). Authorized JavaScript origins: `http://localhost:3000` and `https://<your domain>`. Authorized redirect URI: `https://<project-ref>.supabase.co/auth/v1/callback` (local database: `http://127.0.0.1:54321/auth/v1/callback`). Save the client ID and secret in Supabase: Authentication › Sign In / Providers › Google (local: the `[auth.external.google]` block in `supabase/config.toml`). |
+| Email me a sign-in link, Forgot password? | `AUTH_EMAIL_ENABLED=true` | Give Supabase Auth an email provider first (Authentication › Emails › SMTP Settings), send a test, then set the variable. |
+
+Hosted Supabase: under Authentication › URL Configuration, set the Site URL (`http://localhost:3000` while you build, your domain after deploy) and add both `http://localhost:3000/**` and `https://<your domain>/**` to Redirect URLs. Mismatched redirect URLs after deploy are the usual way to get locked out. Without an email provider, also turn off "Confirm email" (Authentication › Sign In / Providers › Email) so people who sign up aren't left waiting; the allowed email domains still gate sign-up.
+
 ## 4. Run it
 
 ```bash
@@ -69,17 +81,20 @@ cd .. && bash scripts/ui-audit.sh
 
 Either way below ends with `org_settings.setup_completed_at` set; until then every signed-in page redirects to `/setup`.
 
-**Wizard.** Open http://localhost:3000, create an account (`/auth/signup`), and you land on `/setup`. On a fresh install the first person to finish the wizard becomes the admin. The wizard prefills from `open-ronin.config.yaml` when it finds one in the repo root (or at `OPEN_RONIN_CONFIG`), shows the exact YAML it will apply, and accepts a pasted file. Five steps: organisation, branding, service lines, team and modules, review.
-
-**Command line.** From `web/`:
+**Command line (recommended).** From `web/`:
 
 ```bash
 pnpm setup:apply                       # reads ../open-ronin.config.yaml
 pnpm setup:apply path/to/config.yaml   # or a specific file
 pnpm setup:apply --invite              # email the first admin an invite instead of printing a sign-in link
+pnpm setup:apply --app-url https://app.example.com   # build the link for another URL
 ```
 
-It applies the config through the same database function as the wizard (`public.apply_org_config`) and creates `team.first_admin` as an admin.
+It applies the config through the same database function as the wizard (`public.apply_org_config`), creates `team.first_admin` as an admin with the email already confirmed, and prints a one-time sign-in link. Open it, choose a password, and you're in: no email provider and no Google needed. Running it again re-applies the config and prints a fresh link; nothing is duplicated.
+
+**Wizard.** Open http://localhost:3000, create an account (`/auth/signup`), and you land on `/setup`. On a fresh install the first person to finish the wizard becomes the admin. The wizard prefills from `open-ronin.config.yaml` when it finds one in the repo root (or at `OPEN_RONIN_CONFIG`), shows the exact YAML it will apply, and accepts a pasted file. Five steps: organisation, branding, service lines, team and modules, review.
+
+**Locked out?** `pnpm signin-link <email>` prints a one-time sign-in link for any existing account (it also confirms the address if sign-up confirmation was pending). Add `--app-url https://<your domain>` for production.
 
 What setup writes:
 
@@ -98,7 +113,9 @@ Roles: the app has four built-in roles. Config role names map as `admin` → adm
 
 ## 6. Deploy
 
-Vercel: import the repo, set the root directory to `web/`, copy the variables from `web/.env.local` (production values), and add your domain. `web/vercel.json` declares the cron jobs; they call `/api/cron/*` with `CRON_SECRET`. In Supabase Auth, set the Site URL to your domain and add `<domain>/auth/callback` to the redirect list.
+Vercel: import the repo, set the root directory to `web/`, copy the variables from `web/.env.local` (production values, `NEXT_PUBLIC_APP_URL=https://<your domain>`), and add your domain. `web/vercel.json` declares the cron jobs; they call `/api/cron/*` with `CRON_SECRET`.
+
+Then, in Supabase › Authentication › URL Configuration, set the Site URL to `https://<your domain>` and make sure Redirect URLs contains `https://<your domain>/**`. Sign in on production as the admin with email + password to prove it works (no password yet? `pnpm signin-link <email> --app-url https://<your domain>`). The admin created by `setup:apply` is pre-confirmed, so "Confirm email" can't block it.
 
 ## Known gaps
 

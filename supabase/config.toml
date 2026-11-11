@@ -154,8 +154,10 @@ enabled = true
 site_url = "http://localhost:3000"
 # The public URL that Auth serves on. Defaults to the API external URL with `/auth/v1` appended.
 # external_url = ""
-# A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
-additional_redirect_urls = ["http://localhost:3000/auth/callback", "http://127.0.0.1:3000/auth/callback"]
+# A list of URLs that auth providers are permitted to redirect to post authentication (globs allowed).
+# Hosted projects: set the same list (plus your production app_url) in the dashboard under
+# Authentication > URL Configuration. INSTALL.md Steps 4 and 8 walk through it.
+additional_redirect_urls = ["http://localhost:3000/**", "http://127.0.0.1:3000/**"]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
 jwt_expiry = 3600
 # JWT issuer URL. If not set, defaults to auth.external_url.
@@ -314,6 +316,16 @@ max_frequency = "5s"
 # Use an external OAuth provider. The full list of providers are: `apple`, `azure`, `bitbucket`,
 # `discord`, `facebook`, `github`, `gitlab`, `google`, `keycloak`, `linkedin_oidc`, `notion`, `twitch`,
 # `twitter`, `x`, `slack`, `spotify`, `workos`, `zoom`.
+#
+# Google sign-in (optional). The login page shows "Continue with Google" only once this provider
+# is enabled. Locally: uncomment, export the two env vars before `supabase start`, and in the
+# Google OAuth client add http://127.0.0.1:54321/auth/v1/callback as an authorized redirect URI.
+# Hosted: Authentication > Sign In / Providers > Google in the Supabase dashboard instead.
+# [auth.external.google]
+# enabled = true
+# client_id = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
+# secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
+# skip_nonce_check = true
 [auth.external.apple]
 enabled = false
 client_id = ""

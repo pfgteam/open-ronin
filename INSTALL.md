@@ -39,7 +39,8 @@ Read open-ronin.config.yaml. Create (or link) a Supabase project in hosting.regi
 Supabase CLI, after I log in myself (`supabase login`, `supabase link --project-ref <ref>`).
 Apply every migration in supabase/migrations in order (`supabase db push`). If install.demo_data
 is true, load the demo seed (`supabase db push --include-seed`, file supabase/seed.sql). For
-hosting.target local, `supabase start` from the repo root does both. Then verify: list the tables, confirm
+hosting.target local, `supabase start` from the repo root does both (if install.demo_data is
+false, follow it with `supabase db reset --no-seed`). Then verify: list the tables, confirm
 row-level security is on for every public table, and report the migration count applied.
 Stop and show me any error. Don't skip or edit migrations.
 ```
@@ -48,11 +49,39 @@ Stop and show me any error. Don't skip or edit migrations.
 ```text
 Create web/.env.local from web/.env.example. Fill in every non-secret value from
 open-ronin.config.yaml and the Supabase project (URL, app URL, allowed email domains).
+For a local database, `supabase status` prints the keys: "Publishable" goes in
+NEXT_PUBLIC_SUPABASE_ANON_KEY and "Secret" in SUPABASE_SERVICE_ROLE_KEY.
 For each secret (service role key, OAuth secrets, email and AI keys), tell me exactly where to
 copy it from and let me paste it into the file myself, or read it from my secret manager if
 I have one. Never print a secret back. Generate random values for internal secrets like
-CRON_SECRET. Leave variables for integrations I didn't choose blank. Finish with a table of
-required variables: set / missing.
+CRON_SECRET. Leave variables for integrations I didn't choose blank.
+
+Sign-in. Email + password always works and needs nothing here. The login page shows other
+methods only once they are really configured:
+- Supabase Auth URLs (hosted project): in the Supabase dashboard, Authentication > URL
+  Configuration, set Site URL to http://localhost:3000 for now and add these Redirect URLs:
+  http://localhost:3000/** and, if hosting.app_url is set, https://<app_url>/** . Step 8
+  switches the Site URL to production.
+- Google (optional, only if auth.methods includes google): walk me through creating a Google
+  OAuth client (Google Cloud console > APIs & Services > Credentials > Create OAuth client ID,
+  type "Web application"). Authorized JavaScript origins: http://localhost:3000 AND
+  https://<app_url>. Authorized redirect URI: the Supabase callback,
+  https://<project-ref>.supabase.co/auth/v1/callback (local database:
+  http://127.0.0.1:54321/auth/v1/callback). Then I paste the client ID and secret into Supabase
+  (Authentication > Sign In / Providers > Google, or the [auth.external.google] block in
+  supabase/config.toml for a local database). Check that BOTH the localhost and the production
+  redirect URLs are in Supabase's Redirect URLs list: a mismatch after deploy is the classic way
+  to get locked out. If I skip Google, the button simply doesn't appear.
+- Email links (optional, only if email.provider is set): help me add the provider as custom
+  SMTP in Supabase (Authentication > Emails > SMTP Settings; for Resend: host smtp.resend.com,
+  port 465, user resend, password = my Resend API key), send a test, and only then set
+  AUTH_EMAIL_ENABLED=true. That turns on "Email me a sign-in link" and "Forgot password?".
+  Without an email provider, also turn OFF "Confirm email" (Authentication > Sign In / Providers
+  > Email) so teammates who sign up aren't left waiting for a confirmation email; the allowed
+  email domains still decide who can sign up.
+
+Finish with a table of required variables: set / missing, and a line for each sign-in method:
+on / off.
 ```
 
 ### Step 5: Run it locally
@@ -62,15 +91,22 @@ fix nothing in the app code. Report any failure to me. Then start the dev server
 the local URL.
 ```
 
-### Step 6: First-run setup
+### Step 6: First-run setup and your admin account
 ```text
-Read open-ronin.config.yaml. Apply it to the running app: organization name and domain, branding,
-service lines and their deliverables, packages, departments, roles, enabled modules, client
-portal, sign-in methods, and AI spend limits. Use the app's setup wizard (/setup, which loads
-open-ronin.config.yaml from the repo root) or its own script (`pnpm setup:apply` in web/), not raw
-database edits. Google sign-in also needs the Google provider turned on in Supabase Auth. Create the first admin from team.first_admin. Then sign me
-in and show me screenshots of the Work, Clients and Admin pages, with every menu matching the
-modules I chose.
+Read open-ronin.config.yaml. Apply it and create my admin account by running, in web/:
+  pnpm setup:apply
+(not raw database edits). It applies the organization name and domain, branding, service lines and
+their deliverables, packages, departments, roles, enabled modules, client portal, sign-in
+methods and AI spend limits, then creates team.first_admin as an admin with the email already
+confirmed and prints a ONE-TIME sign-in link. No email provider and no Google are needed.
+Give me that link (it is single use and expires in 1 hour). I open it in my browser, it signs
+me in and asks me to choose a password; from then on I sign in with my email and that
+password. If the link expired or I closed the tab, run `pnpm signin-link <my email>` for a new
+one. (Instead of the script I may use the /setup wizard in the browser: the first account that
+signs up becomes admin.)
+Then check that I'm signed in as admin and show me screenshots of the Work, Clients and Admin
+pages, with every menu matching the modules I chose, and of the login page showing only the
+sign-in methods that are configured.
 ```
 
 ### Step 7: Bring your data
@@ -84,12 +120,25 @@ and why. Never overwrite existing records.
 ### Step 8: Go live
 ```text
 Read hosting in open-ronin.config.yaml. Deploy: for vercel-supabase, create the Vercel project
-from this repo (web/ as the root), copy the env variables from web/.env.local (production values),
-set the cron jobs and connect hosting.app_url as a custom domain with the exact DNS records I
-need to add. For docker-supabase: there is no Dockerfile in this repo yet, so stop and tell me;
-run the app with `pnpm build && pnpm start` in web/ behind an HTTPS proxy only if I ask for that.
-Then verify the live URL loads, sign-in works and cron routes answer with auth.
-Report the URL and anything left for me to do.
+from this repo (web/ as the root), copy the env variables from web/.env.local with production
+values (NEXT_PUBLIC_APP_URL = https://<app_url>), set the cron jobs and connect hosting.app_url
+as a custom domain with the exact DNS records I need to add. For docker-supabase: there is no
+Dockerfile in this repo yet, so stop and tell me; run the app with `pnpm build && pnpm start`
+in web/ behind an HTTPS proxy only if I ask for that.
+If Steps 3-6 used a local database, first point web/.env.local at the hosted Supabase project,
+run `supabase db push` and `pnpm setup:apply` against it (that creates my admin there too).
+Then make sign-in work on the production domain:
+1. Supabase dashboard > Authentication > URL Configuration: set Site URL to https://<app_url>
+   and make sure Redirect URLs contains https://<app_url>/** (keep http://localhost:3000/** for
+   local development). If Google is on, confirm https://<app_url> is an authorized JavaScript
+   origin in the Google OAuth client.
+2. My admin account is already email-confirmed (setup:apply pre-confirms it), so Supabase's
+   "Confirm email" setting can't block it and no email is needed.
+3. Prove it: open https://<app_url>/auth/login and sign in as the admin with email + password
+   (or, if I haven't set a password yet, run `pnpm signin-link <admin email> --app-url
+   https://<app_url>` and open that link). Show me a screenshot of the signed-in Home page and
+   of the login page.
+Then verify cron routes answer with auth. Report the URL and anything left for me to do.
 ```
 
 ### Step 9: Invite your team and turn things on
@@ -126,10 +175,12 @@ then deploy. Re-run the Step 10 checks afterwards.
 - [ ] 3. Database created, migrations applied
 - [ ] 4. `.env.local` filled in, no missing required variables
 - [ ] 5. Builds and runs locally
-- [ ] 6. Org, branding, service lines, roles and modules set
+- [ ] 6. Org, branding, service lines, roles and modules set; admin signed in with a password
 - [ ] 7. Data imported
-- [ ] 8. Live on your URL
+- [ ] 8. Live on your URL, Supabase Site URL + redirect URLs on the production domain, admin signed in on prod
 - [ ] 9. Team invited, integrations connected
 - [ ] 10. Go-live checks pass
+
+Locked out? In web/, `pnpm signin-link <email>` (add `--app-url https://<app_url>` for production) prints a one-time sign-in link for any existing account, no email needed.
 
 Stuck? Open an issue with the step number and what your agent reported. Remove any secrets first.

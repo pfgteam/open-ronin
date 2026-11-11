@@ -62,7 +62,7 @@ You are installing Open Ronin for a user. Interview them, then write their answe
 22. Which Supabase region is closest to your team? `[hosting.region]`
 
 ### 7. Sign-in, email and integrations
-23. Sign-in method: Google, email magic link, or both. `[auth.methods]`
+23. Besides email + password (always on), which sign-in methods: Google, email magic link, both, or neither for now? Each one is optional and only appears once it's configured in Step 4. `[auth.methods]`
 24. Who sends transactional email? Choices: Resend (default), other SMTP, or none yet. `[email.provider]` `[email.from]`
 25. Which integrations, if any? Pick any: Google Workspace, Slack, a CRM, social schedulers, transcription, others. Integrations can be added later. `[integrations]`
 
