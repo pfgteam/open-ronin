@@ -10,6 +10,10 @@ Open Ronin installs through your AI coding agent. Start with **[INSTALL.md](INST
 
 The website lives at [pfgteam/OR-site](https://github.com/pfgteam/OR-site) and is served at [openronin.com](https://openronin.com).
 
+## Add-ons
+
+Open-source tools that plug into Open Ronin for other functions (automation, CRM, analytics, social, chat, BI and more): **[ADD-ONS.md](ADD-ONS.md)**.
+
 ## License
 
 [Unlicense](UNLICENSE) (public domain).
